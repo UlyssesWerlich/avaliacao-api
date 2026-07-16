@@ -11,10 +11,10 @@ public interface PautaService {
 
     Page<PautaResponseDTO> listarPautas(String tema, Pageable pagina);
 
-    void criarPauta(PautaRequestDTO pautaRequestDTO);
+    PautaResponseDTO criarPauta(PautaRequestDTO pautaRequestDTO);
 
     void iniciarPauta(Long id, Integer minutosDeVotacao);
 
-    void finalizarPauta();
+    void finalizarPauta(Long id);
 
 }

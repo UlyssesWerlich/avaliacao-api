@@ -2,6 +2,7 @@ package com.avaliacao.assembleia.services.impl;
 
 import com.avaliacao.assembleia.handler.BusinessException;
 import com.avaliacao.assembleia.handler.ErrorCodeEnum;
+import com.avaliacao.assembleia.models.builders.PautaBuilder;
 import com.avaliacao.assembleia.models.builders.VotoBuilder;
 import com.avaliacao.assembleia.models.dtos.ContagemVotosDTO;
 import com.avaliacao.assembleia.models.dtos.VotoRequestDTO;
@@ -24,7 +25,7 @@ public class VotoServiceImpl implements VotoService {
     private final VotoRepository votoRepository;
     private final PautaRepository pautaRepository;
 
-
+    // UMA OPÇÃO PARA EVITAR GARGALO DE PROCESSAMENTO É IMPLEMENTAR A FUNÇÃO DE FORMA ASSÍNCRONA UTILIZANDO MENSAGERIA
     public void votar(final VotoRequestDTO votoRequest) {
 
         Pauta pauta = pautaRepository.findByIdAndStatus(votoRequest.idPauta(), PautaStatusEnum.INICIADA)
@@ -46,8 +47,12 @@ public class VotoServiceImpl implements VotoService {
 
 
     public ContagemVotosDTO contabilizarVotos(final Long idPauta){
+        if (!pautaRepository.existsById(idPauta))
+                throw new BusinessException(HttpStatus.NOT_FOUND, ErrorCodeEnum.ERRO_PAUTA_NAO_ENCONTRADA, idPauta);
+
         Long sim = votoRepository.countByIdPautaAndVoto(idPauta, OpcaoVotoEnum.SIM);
         Long nao = votoRepository.countByIdPautaAndVoto(idPauta, OpcaoVotoEnum.NAO);
+
         return new ContagemVotosDTO(sim, nao);
     }
 }

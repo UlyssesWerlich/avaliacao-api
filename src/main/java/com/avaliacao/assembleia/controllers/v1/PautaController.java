@@ -48,9 +48,8 @@ public class PautaController {
             summary = "Criar pauta",
             description = "Cria uma nova pauta"
     )
-    public ResponseEntity<Void> criarPauta(@RequestBody @Valid PautaRequestDTO pautaRequestDTO){
-        pautaService.criarPauta(pautaRequestDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PautaResponseDTO> criarPauta(@RequestBody @Valid PautaRequestDTO pautaRequestDTO){
+        return ResponseEntity.ok(pautaService.criarPauta(pautaRequestDTO));
     }
 
 
@@ -64,6 +63,19 @@ public class PautaController {
             @RequestParam(required = false, defaultValue = "1") Integer minutosDeVotacao
     ) {
         pautaService.iniciarPauta(id, minutosDeVotacao);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PutMapping("/{id}/finalizar")
+    @Operation(
+            summary = "Finalizar pauta",
+            description = "Encerra a votação de uma pauta antes do tempo determinado"
+    )
+    public ResponseEntity<Void> finalizarPauta(
+            @PathVariable Long id
+    ) {
+        pautaService.finalizarPauta(id);
         return ResponseEntity.ok().build();
     }
 }

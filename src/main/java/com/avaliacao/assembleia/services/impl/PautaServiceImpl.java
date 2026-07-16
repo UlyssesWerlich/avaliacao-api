@@ -41,12 +41,14 @@ public class PautaServiceImpl implements PautaService {
 
 
     @Override
-    public void criarPauta(PautaRequestDTO pautaRequestDTO) {
+    public PautaResponseDTO criarPauta(PautaRequestDTO pautaRequestDTO) {
         Pauta pauta = new Pauta();
         pauta.setTema(pautaRequestDTO.tema());
+        pauta.setDescricao(pautaRequestDTO.descricao());
         pauta.setStatus(PautaStatusEnum.CRIADA);
         pauta.setDataCriacao(LocalDateTime.now());
-        pautaRepository.save(pauta);
+
+        return PautaBuilder.gerarResponse(pautaRepository.save(pauta));
     }
 
 
@@ -64,7 +66,11 @@ public class PautaServiceImpl implements PautaService {
 
 
     @Override
-    public void finalizarPauta() {
+    public void finalizarPauta(Long id) {
+        Pauta pauta = pautaRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, ErrorCodeEnum.ERRO_PAUTA_NAO_ENCONTRADA, id));
 
+        pauta.setStatus(PautaStatusEnum.FINALIZADA);
+        pautaRepository.save(pauta);
     }
 }

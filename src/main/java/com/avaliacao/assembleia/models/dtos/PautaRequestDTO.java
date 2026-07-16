@@ -6,5 +6,6 @@ import lombok.Builder;
 @Builder
 public record PautaRequestDTO (
     @NotBlank
-    String tema
+    String tema,
+    String descricao
 ){}
