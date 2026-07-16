@@ -13,3 +13,9 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+api:
+  user-info:
+    host: https://user-info.herokuapp.com
+    base-path: /users/{cpf}
+    consumer-key:

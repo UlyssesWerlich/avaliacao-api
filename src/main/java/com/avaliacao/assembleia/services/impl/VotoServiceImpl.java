@@ -2,10 +2,11 @@ package com.avaliacao.assembleia.services.impl;
 
 import com.avaliacao.assembleia.handler.BusinessException;
 import com.avaliacao.assembleia.handler.ErrorCodeEnum;
-import com.avaliacao.assembleia.models.builders.PautaBuilder;
+import com.avaliacao.assembleia.integrations.UserInfoClient;
 import com.avaliacao.assembleia.models.builders.VotoBuilder;
 import com.avaliacao.assembleia.models.dtos.ContagemVotosDTO;
 import com.avaliacao.assembleia.models.dtos.VotoRequestDTO;
+import com.avaliacao.assembleia.models.dtos.userinfo.UserInfoDTO;
 import com.avaliacao.assembleia.models.entities.Pauta;
 import com.avaliacao.assembleia.models.enums.OpcaoVotoEnum;
 import com.avaliacao.assembleia.models.enums.PautaStatusEnum;
@@ -24,6 +25,8 @@ public class VotoServiceImpl implements VotoService {
 
     private final VotoRepository votoRepository;
     private final PautaRepository pautaRepository;
+
+    private final UserInfoClient userInfoClient;
 
     // UMA OPÇÃO PARA EVITAR GARGALO DE PROCESSAMENTO É IMPLEMENTAR A FUNÇÃO DE FORMA ASSÍNCRONA UTILIZANDO MENSAGERIA
     public void votar(final VotoRequestDTO votoRequest) {
@@ -54,5 +57,15 @@ public class VotoServiceImpl implements VotoService {
         Long nao = votoRepository.countByIdPautaAndVoto(idPauta, OpcaoVotoEnum.NAO);
 
         return new ContagemVotosDTO(sim, nao);
+    }
+
+
+    private boolean verificarCpf(String cpf) {
+        UserInfoDTO userInfoDTO = userInfoClient.verificarCpf(cpf);
+        return switch (userInfoDTO.getStatus()) {
+            case "ABLE_TO_VOTE" -> true;
+            case "UNABLE_TO_VOTE" -> false;
+            default -> false;
+        };
     }
 }
