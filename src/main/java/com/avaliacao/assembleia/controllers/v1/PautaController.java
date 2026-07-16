@@ -1,0 +1,69 @@
+package com.avaliacao.assembleia.controllers.v1;
+
+import com.avaliacao.assembleia.models.dtos.PautaRequestDTO;
+import com.avaliacao.assembleia.models.dtos.PautaResponseDTO;
+import com.avaliacao.assembleia.services.PautaService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping("/v1/pautas")
+@RequiredArgsConstructor
+public class PautaController {
+
+    private final PautaService pautaService;
+
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Buscar pauta",
+            description = "Busca pauta por identificador único"
+    )
+    public ResponseEntity<PautaResponseDTO> buscarPauta(@PathVariable Long id) {
+        return ResponseEntity.ok(pautaService.buscarPauta(id));
+    }
+
+
+    @GetMapping
+    @Operation(
+            summary = "Listar pautas",
+            description = "Lista pautas por parâmetros"
+    )
+    public ResponseEntity<Page<PautaResponseDTO>> listarPautas(
+            @RequestParam String tema,
+            Pageable pagina
+    ) {
+        return ResponseEntity.ok(pautaService.listarPautas(tema, pagina));
+    }
+
+
+    @PostMapping
+    @Operation(
+            summary = "Criar pauta",
+            description = "Cria uma nova pauta"
+    )
+    public ResponseEntity<Void> criarPauta(@RequestBody @Valid PautaRequestDTO pautaRequestDTO){
+        pautaService.criarPauta(pautaRequestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PutMapping("/{id}")
+    @Operation(
+            summary = "Iniciar pauta",
+            description = "Dá o início para a votação de uma pauta"
+    )
+    public ResponseEntity<Void> iniciarPauta(
+            @PathVariable Long id,
+            @RequestParam(required = false, defaultValue = "1") Integer minutosDeVotacao
+    ) {
+        pautaService.iniciarPauta(id, minutosDeVotacao);
+        return ResponseEntity.ok().build();
+    }
+}
