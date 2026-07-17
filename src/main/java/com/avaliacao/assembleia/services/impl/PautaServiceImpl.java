@@ -53,21 +53,21 @@ public class PautaServiceImpl implements PautaService {
 
 
     @Override
-    public void iniciarPauta(Long id, Integer minutosDeVotacao) {
+    public PautaResponseDTO iniciarPauta(Long id, Integer minutosDeVotacao) {
 
-        Pauta pauta = pautaRepository.findById(id)
+        Pauta pauta = pautaRepository.findByIdAndStatus(id, PautaStatusEnum.CRIADA)
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, ErrorCodeEnum.ERRO_INICIAR_VOTACAO_PAUTA_NAO_ENCONTRADA, id));
 
         pauta.setStatus(PautaStatusEnum.INICIADA);
         pauta.setDataAberturaSessao(LocalDateTime.now());
         pauta.setDataFinalizacaoSessao(LocalDateTime.now().plusMinutes(minutosDeVotacao));
-        pautaRepository.save(pauta);
+        return PautaBuilder.gerarResponse(pautaRepository.save(pauta));
     }
 
 
     @Override
     public void finalizarPauta(Long id) {
-        Pauta pauta = pautaRepository.findById(id)
+        Pauta pauta = pautaRepository.findByIdAndStatus(id, PautaStatusEnum.INICIADA)
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, ErrorCodeEnum.ERRO_PAUTA_NAO_ENCONTRADA, id));
 
         pauta.setStatus(PautaStatusEnum.FINALIZADA);

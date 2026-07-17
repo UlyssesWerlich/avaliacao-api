@@ -13,7 +13,7 @@ public interface PautaService {
 
     PautaResponseDTO criarPauta(PautaRequestDTO pautaRequestDTO);
 
-    void iniciarPauta(Long id, Integer minutosDeVotacao);
+    PautaResponseDTO iniciarPauta(Long id, Integer minutosDeVotacao);
 
     void finalizarPauta(Long id);
 

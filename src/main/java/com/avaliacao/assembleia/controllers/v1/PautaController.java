@@ -58,12 +58,11 @@ public class PautaController {
             summary = "Iniciar pauta",
             description = "Dá o início para a votação de uma pauta"
     )
-    public ResponseEntity<Void> iniciarPauta(
+    public ResponseEntity<PautaResponseDTO> iniciarPauta(
             @PathVariable Long id,
             @RequestParam(required = false, defaultValue = "1") Integer minutosDeVotacao
     ) {
-        pautaService.iniciarPauta(id, minutosDeVotacao);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(pautaService.iniciarPauta(id, minutosDeVotacao));
     }
 
 

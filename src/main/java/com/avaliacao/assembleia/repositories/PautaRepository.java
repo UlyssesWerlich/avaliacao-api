@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface PautaRepository extends JpaRepository<Pauta, Long> {
 
     Optional<Pauta> findByIdAndStatus(Long id, PautaStatusEnum status);
+
+    Boolean existsByIdAndStatus(Long idPauta, PautaStatusEnum status);
 }

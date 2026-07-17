@@ -50,7 +50,7 @@ public class VotoServiceImpl implements VotoService {
 
 
     public ContagemVotosDTO contabilizarVotos(final Long idPauta){
-        if (!pautaRepository.existsById(idPauta))
+        if (!pautaRepository.existsByIdAndStatus(idPauta, PautaStatusEnum.FINALIZADA))
                 throw new BusinessException(HttpStatus.NOT_FOUND, ErrorCodeEnum.ERRO_PAUTA_NAO_ENCONTRADA, idPauta);
 
         Long sim = votoRepository.countByIdPautaAndVoto(idPauta, OpcaoVotoEnum.SIM);
@@ -64,7 +64,6 @@ public class VotoServiceImpl implements VotoService {
         UserInfoDTO userInfoDTO = userInfoClient.verificarCpf(cpf);
         return switch (userInfoDTO.getStatus()) {
             case "ABLE_TO_VOTE" -> true;
-            case "UNABLE_TO_VOTE" -> false;
             default -> false;
         };
     }
