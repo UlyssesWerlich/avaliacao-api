@@ -2,6 +2,7 @@ package com.avaliacao.assembleia.controllers.v1;
 
 import com.avaliacao.assembleia.models.dtos.PautaRequestDTO;
 import com.avaliacao.assembleia.models.dtos.PautaResponseDTO;
+import com.avaliacao.assembleia.models.enums.PautaStatusEnum;
 import com.avaliacao.assembleia.services.PautaService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -36,10 +37,12 @@ public class PautaController {
             description = "Lista pautas por parâmetros"
     )
     public ResponseEntity<Page<PautaResponseDTO>> listarPautas(
-            @RequestParam String tema,
+            @RequestParam(required = false) String tema,
+            @RequestParam(required = false) String descricao,
+            @RequestParam(required = false) PautaStatusEnum status,
             Pageable pagina
     ) {
-        return ResponseEntity.ok(pautaService.listarPautas(tema, pagina));
+        return ResponseEntity.ok(pautaService.listarPautas(tema, descricao, status, pagina));
     }
 
 

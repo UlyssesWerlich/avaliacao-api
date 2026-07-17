@@ -15,7 +15,11 @@ spring:
       path: /h2-console
 
 api:
+  assembleia:
+    host: http://localhost:8080
   user-info:
     host: https://user-info.herokuapp.com
     base-path: /users/{cpf}
     consumer-key:
+
+validar-cpf: true

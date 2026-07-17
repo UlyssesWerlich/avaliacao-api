@@ -7,6 +7,7 @@ import com.avaliacao.assembleia.models.dtos.PautaRequestDTO;
 import com.avaliacao.assembleia.models.dtos.PautaResponseDTO;
 import com.avaliacao.assembleia.models.entities.Pauta;
 import com.avaliacao.assembleia.models.enums.PautaStatusEnum;
+import com.avaliacao.assembleia.models.specs.PautaSpecs;
 import com.avaliacao.assembleia.repositories.PautaRepository;
 import com.avaliacao.assembleia.services.PautaService;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,8 @@ public class PautaServiceImpl implements PautaService {
 
 
     @Override
-    public Page<PautaResponseDTO> listarPautas(String tema, Pageable pagina) {
-        return pautaRepository.findAll(pagina)
+    public Page<PautaResponseDTO> listarPautas(String tema, String descricao, PautaStatusEnum status, Pageable pagina) {
+        return pautaRepository.findAll(new PautaSpecs(tema, descricao, status), pagina)
                 .map(PautaBuilder::gerarResponse);
     }
 
