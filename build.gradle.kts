@@ -18,6 +18,11 @@ repositories {
 }
 
 dependencies {
+	// COMO MELHORIA, DA PRA GERENCIAR A VERSÃO DAS BIBLIOTECAS POR MEIO DE UMA LIB BOM (Bill Of Materials).
+	// ASSIM A VERSÃO NÃO ESTARIA HARDCODED NO BUILD.GRADLE
+
+	// PARA SIMPLIFICAR, UTILIZEI O H2 PARA SIMULAR UM BANCO DE DADOS RELACIONAL.
+
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")

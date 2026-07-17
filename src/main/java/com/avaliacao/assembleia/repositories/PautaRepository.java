@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// ADICIONADO JPA SPECIFICATION PARA CONSULTA DINÂMICA
+
 @Repository
 public interface PautaRepository extends JpaRepository<Pauta, Long>, JpaSpecificationExecutor<Pauta> {
 
